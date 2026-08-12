@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hands-On Explainable AI · Interpreting, Evaluating, and Trusting Large Language Models</title>
+<meta name="description" content="A lab-first book on opening language models up: feature attribution, attention, probing, chain-of-thought faithfulness, mechanistic interpretability, and explainability in production. Thirteen chapters, thirteen runnable Colab labs, every number from an executed run.">
+<meta name="author" content="Hadi Mohammadi">
+<link rel="canonical" href="https://hands-on-xai.github.io/">
+<meta name="theme-color" content="#211D18">
+<meta property="og:type" content="book">
+<meta property="og:title" content="Hands-On Explainable AI">
+<meta property="og:description" content="Interpreting, Evaluating, and Trusting Large Language Models. A lab-first book: 13 chapters, 13 runnable Colab labs, every number from an executed run.">
+<meta property="og:url" content="https://hands-on-xai.github.io/">
+<meta property="og:image" content="https://hands-on-xai.github.io/assets/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Book",
+  "name": "Hands-On Explainable AI: Interpreting, Evaluating, and Trusting Large Language Models",
+  "author": {
+    "@type": "Person",
+    "name": "Hadi Mohammadi",
+    "url": "https://mohammadi.cv",
+    "sameAs": [
+      "https://orcid.org/0000-0003-0860-9200",
+      "https://github.com/mohammadi-hadi"
+    ]
+  },
+  "url": "https://hands-on-xai.github.io/",
+  "image": "https://hands-on-xai.github.io/assets/og-card.png",
+  "inLanguage": "en",
+  "genre": "Computers / Artificial Intelligence",
+  "description": "A lab-first book on interpreting, evaluating, and trusting large language models: feature attribution, attention analysis, probing, chain-of-thought faithfulness, mechanistic interpretability, behavioral audits, and explainability in production."
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="wordmark" href="#top">Hands-On Explainable AI</a>
+    <nav class="site-nav">
+      <a href="#results">Results</a>
+      <a href="#inside">Inside the book</a>
+      <a href="#author">Author</a>
+      <a href="#publishers">For publishers</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <p class="kicker"><span class="dots" aria-hidden="true"><i class="dot-teal"></i><i class="dot-rust"></i><i class="dot-amber"></i></span> A lab-first guide to LLM interpretability</p>
+      <h1><span class="hands-on">Hands-On</span>Explainable AI</h1>
+      <p class="subtitle-chips" aria-label="Interpreting, Evaluating, and Trusting Large Language Models">
+        <span class="chip-a">Interpreting</span><span class="chip-b">Evaluating</span><span class="chip-and">and</span><span class="chip-c">Trusting</span><span class="chip-d">Large</span><span class="chip-e">Language</span><span class="chip-f">Models</span>
+      </p>
+      <p class="byline">by <strong>Hadi Mohammadi</strong></p>
+      <p class="pitch">A book about opening language models up: feature attribution, attention, probing, chain-of-thought faithfulness, mechanistic interpretability, behavioral audits, and what it takes to run all of that in production. Every number the book reports as its own comes from an executed, seeded run you can check.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="assets/sample-ch01.pdf">Read a sample chapter</a>
+        <a class="btn btn-ghost" href="https://github.com/mohammadi-hadi/hands-on-xai-labs">Run the labs</a>
+      </div>
+      <p class="cta-aside">Or start in the browser: <a href="https://mohammadi.cv/playground/">type a sentence, see which words decide the verdict, try to flip it</a>.</p>
+      <p class="status-strip">complete revised draft · 13 chapters in four parts · 13 runnable labs · every lab fits a free Colab GPU</p>
+    </div>
+    <div class="cover-col">
+      <img src="assets/cover-front.png" width="520" alt="Front cover of Hands-On Explainable AI by Hadi Mohammadi: cream background with dark bands, the subtitle set as highlighted word chips, and rows of redacted text with a few tokens highlighted in teal and amber">
+      <p class="cover-credit">cover, like every figure inside: made by the author</p>
+    </div>
+  </div>
+</section>
+
+<div class="saliency" aria-hidden="true">
+  <div class="wrap">
+    <div class="bars">
+      <div class="bar"></div>
+      <div class="tokens">
+        <i style="width:64px;background:var(--teal-chip)"></i>
+        <i style="width:96px;background:var(--teal-chip-2)"></i>
+        <i style="width:40px;background:var(--teal)"></i>
+        <i style="width:110px;background:var(--teal-chip)"></i>
+        <i style="width:72px;background:var(--amber-deep)"></i>
+        <i style="width:88px;background:var(--teal-chip-2)"></i>
+      </div>
+      <div class="bar short"></div>
+    </div>
+    <p class="cap">&#9492; the tokens the model weighted</p>
+  </div>
+</div>
+
+<section id="results">
+  <div class="wrap">
+    <p class="section-kicker">Three results from inside the book</p>
+    <div class="proofs">
+      <div class="proof">
+        <p class="num">0.95 &rarr; 0.515</p>
+        <h3>Honest results, kept in</h3>
+        <p>Chapter 1 ships a model at 95% accuracy that collapses to coin-flipping after deployment. The ten-line explanation that would have caught it before launch is the point of the whole book.</p>
+        <p class="src">measured in the chapter 1 lab</p>
+      </div>
+      <div class="proof">
+        <p class="num">2 words</p>
+        <h3>The explanation is the attack map</h3>
+        <p>Chapter 7 builds a transparent AI-text detector, then breaks it: with a budget of two word swaps, an attack guided by the detector's own LIME explanations flips 95% of verdicts. Random edits with the same budget flip 15%.</p>
+        <p class="src">measured in the chapter 7 lab</p>
+      </div>
+      <div class="proof">
+        <p class="num">32 / 32</p>
+        <h3>Audit your judges</h3>
+        <p>The book's LLM judge preferred whichever answer came first, in all 32 trials. Chapter 8 shows how to catch that before a leaderboard quietly inherits it.</p>
+        <p class="src">measured in the chapter 8 lab</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="receipts">
+  <div class="wrap">
+    <p class="section-kicker">Why trust this</p>
+    <div class="cols">
+      <div>
+        <h2>Every number has a receipt.</h2>
+        <p class="lead">Each chapter is written from a notebook that actually ran, with seeds fixed. The notebook's results go into an experiment ledger, and the prose quotes the ledger, <strong>never memory</strong>. Negative and messy results stay in on purpose: the attention chapter reports where attention misleads, and the evaluation chapter reports the metric that failed. You can re-run all of it and check the book against your own outputs.</p>
+      </div>
+      <ul class="receipt-list">
+        <li><span class="tag">Open notebooks</span>All 13 labs are public and MIT-licensed: <a href="https://github.com/mohammadi-hadi/hands-on-xai-labs">github.com/mohammadi-hadi/hands-on-xai-labs</a></li>
+        <li><span class="tag">Archived</span>The lab code is archived on Zenodo: <a href="https://doi.org/10.5281/zenodo.21804605">DOI 10.5281/zenodo.21804605</a></li>
+        <li><span class="tag">Re-tested weekly</span>A Monday <a href="https://github.com/mohammadi-hadi/hands-on-xai-labs/actions/workflows/smoke.yml">CI run</a> re-executes the labs against current library versions, so upstream changes surface before they reach a reader</li>
+        <li><span class="tag">Free to run</span>Every lab fits a free-tier Colab GPU in under 20 minutes; there is also a <a href="https://mohammadi.cv/opening-the-black-box/">free self-paced course</a> built on the same notebooks</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="inside">
+  <div class="wrap">
+    <p class="section-kicker">What's inside</p>
+
+    <div class="part">
+      <p class="part-label">Part I</p>
+      <h3>The Lay of the Land</h3>
+      <p class="part-blurb">Why accuracy is not understanding, a working map of every method family, and a tour of the transformer with the places explanations attach.</p>
+      <ul class="chapters">
+        <li><span class="n">01</span><span class="t">Right for the Wrong Reasons: Why Language Models Need Explaining<span class="d">A 30-line Clever Hans demo: two 95%-accurate classifiers that collapse under distribution shift, and the one that warned us.</span></span><a class="lab" href="https://colab.research.google.com/github/mohammadi-hadi/hands-on-xai-labs/blob/main/notebooks/ch01-why-explainability.ipynb">lab &nearr;</a></li>
+        <li><span class="n">02</span><span class="t">A Map of the Territory: One Prediction, Five Explanations<span class="d">One sentiment prediction from a fine-tuned transformer, explained five different ways.</span></span><a class="lab" href="https://colab.research.google.com/github/mohammadi-hadi/hands-on-xai-labs/blob/main/notebooks/ch02-map-of-the-territory.ipynb">lab &nearr;</a></li>
+        <li><span class="n">03</span><span class="t">Inside the Transformer: What There Is to Explain<span class="d">A guided dissection of GPT-2 small: tokenizers, embedding geometry, attention heads, the logit lens.</span></span><a class="lab" href="https://colab.research.google.com/github/mohammadi-hadi/hands-on-xai-labs/blob/main/notebooks/ch03-inside-the-transformer.ipynb">lab &nearr;</a></li>
+      </ul>
+    </div>
+
+    <div class="part">
+      <p class="part-label">Part II</p>
+      <h3>The Explanation Toolkit</h3>
+      <p class="part-blurb">SHAP, LIME, and gradients on one shared model; attention read honestly; probes and counterfactuals; then a case study that breaks its own pipeline, and the chapter that scores every explanation before you trust it.</p>
+      <ul class="chapters">
+        <li><span class="n">04</span><span class="t">Feature Attribution: SHAP, LIME, and Friends<span class="d">A classifier that has to show its work: LIME, SHAP, and Integrated Gradients on the same ten inputs.</span></span><a class="lab" href="https://colab.research.google.com/github/mohammadi-hadi/hands-on-xai-labs/blob/main/notebooks/ch04-feature-attribution.ipynb">lab &nearr;</a></li>
+        <li><span class="n">05</span><span class="t">Attention: Window or Mirage?<span class="d">Attention maps put on trial: aggregation traps, rollout, gradient corroboration, head ablation.</span></span><a class="lab" href="https://colab.research.google.com/github/mohammadi-hadi/hands-on-xai-labs/blob/main/notebooks/ch05-attention.ipynb">lab &nearr;</a></li>
+        <li><span class="n">06</span><span class="t">What the Model Knows and Doesn't Use: Probing, Counterfactuals, and Concepts<span class="d">Layer-wise probes, greedy counterfactual edits, and a concept direction: three representation-level explanations.</span></span><a class="lab" href="https://colab.research.google.com/github/mohammadi-hadi/hands-on-xai-labs/blob/main/notebooks/ch06-probing-counterfactuals-concepts.ipynb">lab &nearr;</a></li>
+        <li><span class="n">07</span><span class="t">Build It, Break It: When Your Explanation Is the Attack Map<span class="d">A transparent AI-generated-text detector, and then the attack that breaks it.</span></span><a class="lab" href="https://colab.research.google.com/github/mohammadi-hadi/hands-on-xai-labs/blob/main/notebooks/ch07-build-it-break-it.ipynb">lab &nearr;</a></li>
+        <li><span class="n">08</span><span class="t">Evaluating Explanations: Random Floors, Deletion Tests, and Judges You Haven't Checked<span class="d">A deletion and insertion faithfulness harness with bootstrap confidence intervals, plus an LLM-judge audit that wipes out.</span></span><a class="lab" href="https://colab.research.google.com/github/mohammadi-hadi/hands-on-xai-labs/blob/main/notebooks/ch08-evaluating-explanations.ipynb">lab &nearr;</a></li>
+      </ul>
+    </div>
+
+    <div class="part">
+      <p class="part-label">Part III</p>
+      <h3>From Predictions to the Model Itself</h3>
+      <p class="part-blurb">Whether chain-of-thought reasoning is faithful, what circuits and sparse autoencoders actually recover, and how to audit model values against real survey data.</p>
+      <ul class="chapters">
+        <li><span class="n">09</span><span class="t">Is the Reasoning Real? Chain-of-Thought and Faithfulness<span class="d">A faithfulness test bench for chain-of-thought: truncation, mistake injection, planted hints.</span></span><a class="lab" href="https://colab.research.google.com/github/mohammadi-hadi/hands-on-xai-labs/blob/main/notebooks/ch09-cot-faithfulness.ipynb">lab &nearr;</a></li>
+        <li><span class="n">10</span><span class="t">Mechanistic Interpretability: Circuits, Features, and Sparse Autoencoders<span class="d">Induction heads, activation patching, SAE features, and steering on GPT-2 small.</span></span><a class="lab" href="https://colab.research.google.com/github/mohammadi-hadi/hands-on-xai-labs/blob/main/notebooks/ch10-mechanistic-interpretability.ipynb">lab &nearr;</a></li>
+        <li><span class="n">11</span><span class="t">Auditing Behavior at Scale: Values, Bias, and Cultural Alignment<span class="d">A miniature cultural-alignment audit: 19 World Values Survey moral items scored two ways across three small models.</span></span><a class="lab" href="https://colab.research.google.com/github/mohammadi-hadi/hands-on-xai-labs/blob/main/notebooks/ch11-auditing-behavior.ipynb">lab &nearr;</a></li>
+      </ul>
+    </div>
+
+    <div class="part">
+      <p class="part-label">Part IV</p>
+      <h3>Building Explainable LLM Systems</h3>
+      <p class="part-blurb">Training for faithfulness with DPO, then production: RAG with citation audits, agent replay audits, drift monitors that fire before accuracy falls, and the EU AI Act mapped to the tools you now have.</p>
+      <ul class="chapters">
+        <li><span class="n">12</span><span class="t">Training for Explainability: SFT, DPO, and GRPO for Faithful Reasoning<span class="d">A complete SFT-then-DPO preference-training pipeline that trains silent hint-adoption out of a small model.</span></span><a class="lab" href="https://colab.research.google.com/github/mohammadi-hadi/hands-on-xai-labs/blob/main/notebooks/ch12-training-for-explainability.ipynb">lab &nearr;</a></li>
+        <li><span class="n">13</span><span class="t">Explainability in Production: RAG, Agents, and Governance<span class="d">A fully instrumented RAG assistant: citation audit, retrieval receipts, an agent replay audit, and an attribution-drift monitor.</span></span><a class="lab" href="https://colab.research.google.com/github/mohammadi-hadi/hands-on-xai-labs/blob/main/notebooks/ch13-explainability-in-production.ipynb">lab &nearr;</a></li>
+      </ul>
+    </div>
+
+    <p class="toc-note">Plus four appendices, including a practitioner's map of the EU AI Act: which article asks for which artifact, and which chapter of the book produces it.</p>
+  </div>
+</section>
+
+<section id="figures">
+  <div class="wrap">
+    <p class="section-kicker">Figures from the book</p>
+    <div class="fig-grid">
+      <figure class="fig-card">
+        <img src="assets/figures/ch01-f04-faithful-plausible-quadrant.svg" alt="A two-by-two quadrant chart: plausibility on one axis, faithfulness on the other. The danger zone is plausible but unfaithful; the goal is explanations that are both convincing and true">
+        <figcaption>Plausible is not faithful. The quadrant the book keeps returning to: explanations that convince you and lie.</figcaption>
+      </figure>
+      <figure class="fig-card">
+        <img src="assets/figures/ch09-f03-silent-flip-transcript.svg" alt="An annotated chain-of-thought transcript in which a planted hint changes the model's answer while the written reasoning never mentions the hint">
+        <figcaption>A silent flip: the planted hint changes the answer, and the written reasoning never mentions it.</figcaption>
+      </figure>
+      <figure class="fig-card">
+        <img src="assets/figures/ch01-f06-clever-hans-lifecycle.svg" alt="A lifecycle diagram of a Clever Hans model: high validation accuracy, shortcut feature, deployment, and collapse under distribution shift">
+        <figcaption>The Clever Hans lifecycle: 95% on the leaderboard, a coin flip in the wild.</figcaption>
+      </figure>
+      <figure class="fig-card">
+        <img src="assets/figures/ch10-f01-superposition-unmixing.svg" alt="A diagram of superposition: many features packed into fewer dimensions, and a sparse autoencoder unmixing them into separate features">
+        <figcaption>Superposition, and the sparse autoencoder that unmixes it.</figcaption>
+      </figure>
+    </div>
+    <p class="toc-note">All figures in the book are made by the author, in the book's own palette.</p>
+  </div>
+</section>
+
+<section id="author" class="author">
+  <div class="wrap">
+    <p class="section-kicker">About the author</p>
+    <div class="cols">
+      <img src="assets/hadi-mohammadi.jpg" width="280" alt="Portrait of Hadi Mohammadi">
+      <div class="bio">
+        <p><strong>Hadi Mohammadi</strong> is a PhD candidate in Natural Language Processing at Utrecht University. He works on explainable NLP: how to interrogate language models, how to score the answers, and how to tell when an explanation is lying.</p>
+        <p>This book turns that research into something you can run. The labs, the playground, and a free five-day course built on the same notebooks are already public.</p>
+        <div class="author-links">
+          <a href="https://mohammadi.cv">mohammadi.cv</a>
+          <a href="https://orcid.org/0000-0003-0860-9200">ORCID</a>
+          <a href="https://github.com/mohammadi-hadi">GitHub</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="publishers" class="publishers">
+  <div class="wrap">
+    <p class="section-kicker">For publishers and reviewers</p>
+    <div class="card">
+      <div>
+        <h2>The manuscript is complete.</h2>
+        <p>A complete revised draft, a formal proposal package, and submission sample chapters are ready to share with acquisitions editors and technical reviewers. The book is currently in submission.</p>
+      </div>
+      <a class="btn btn-primary" href="https://mohammadi.cv">Get in touch</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p class="rights">&copy; 2026 Hadi Mohammadi. All rights reserved.</p>
+    <p>The text, figures, and cover are the author's own work and may not be reused without permission. The lab code is MIT-licensed in its <a href="https://github.com/mohammadi-hadi/hands-on-xai-labs">public repository</a>.</p>
+    <p>This site sets no cookies and runs no trackers. Set in Source Sans 3 and JetBrains Mono, the same faces as the book. Built by hand.</p>
+  </div>
+</footer>
+
+</body>
+</html>
